@@ -83,7 +83,7 @@ public class user_profile_me_edit extends AppCompatActivity {
         editMyNameText.setText(user_info.getUserName());
         editMyPhoneText.setText(user_info.getPhoneNum());
 
-        if (user_info.getProfileImg() != null) {
+        if (user_info != null) {
             bitmap = converter.StringToBitmap(user_info.getProfileImg());
             loadGlideImage(editMyProfileImg);
 

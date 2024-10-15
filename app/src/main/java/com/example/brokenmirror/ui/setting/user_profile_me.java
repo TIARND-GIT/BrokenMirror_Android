@@ -55,7 +55,7 @@ public class user_profile_me extends AppCompatActivity {
         myNameText.setText(user_info.getUserName());
         myPhoneNumberText.setText(user_info.getPhoneNum());
 
-        if (user_info.getProfileImg() != null) {
+        if (user_info != null) {
             bitmap = converter.StringToBitmap(user_info.getProfileImg());
             loadGlideImage(myProfileImg);
         }
