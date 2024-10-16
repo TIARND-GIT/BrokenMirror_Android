@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.brokenmirror.R;
@@ -90,10 +91,7 @@ public class setting_account extends AppCompatActivity {
 
         if (user_info != null) {
             bitmap = converter.StringToBitmap(user_info.getProfileImg());
-            Glide.with(this)
-                    .load(bitmap)
-                    .apply(RequestOptions.bitmapTransform(new CircleCrop()))
-                    .into(userProfileImg);
+            loadGlideImage(userProfileImg);
         }
 
         // Button
@@ -186,4 +184,14 @@ public class setting_account extends AppCompatActivity {
             user_info = user_pref.getUser();
         }
     });
+
+    // Glide (이미지 로드)
+    public void loadGlideImage(ImageView profileImage) {
+        Glide.with(this)
+                .load(bitmap)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+                .into(profileImage);
+    }
 }

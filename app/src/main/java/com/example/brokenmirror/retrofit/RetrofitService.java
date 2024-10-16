@@ -8,7 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 // Retrofit 인스턴스 생성 => 클래스명을 RetrofitService로 해야 돼, RetrofitClient로 해야 돼?
 public class RetrofitService {
-    private static String BASE_URL = "http://10.0.2.2:8081";
+//    private static String BASE_URL = "http://10.0.2.2:8081";
+    private static String BASE_URL = "http://172.22.7.105:8081";
     private static Retrofit retrofit;
 
     // Retrofit 객체 생성

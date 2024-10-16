@@ -49,7 +49,6 @@
                     android:id="@+id/user_profile"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:background="@drawable/default_profile"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
                     app:layout_constraintStart_toStartOf="parent"

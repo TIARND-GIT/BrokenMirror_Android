@@ -61,6 +61,8 @@ public class setting_account_withdrawal_notice extends AppCompatActivity {
         // userSharedPref
         user_pref = new UserSharedPref(this);
         user_info = user_pref.getUser();
+        // AutoLogin
+        auto_pref = new AutoSharedPref(this);
 
         LinearLayout list_0_layout = findViewById(R.id.setting_account_withdrawal_notice_layout_0);
         LinearLayout list_1_layout = findViewById(R.id.setting_account_withdrawal_notice_layout_1);
@@ -239,8 +241,8 @@ public class setting_account_withdrawal_notice extends AppCompatActivity {
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
                     Log.e("TAG", "Success: " + true);
-                    user_pref.clearUser();
-                    auto_pref.clearAuto();
+                    user_pref.removeUser();
+                    auto_pref.removeAuto();
                 }
             }
 
