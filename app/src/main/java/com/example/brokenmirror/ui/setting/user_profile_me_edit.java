@@ -86,7 +86,6 @@ public class user_profile_me_edit extends AppCompatActivity {
         if (user_info != null) {
             bitmap = converter.StringToBitmap(user_info.getProfileImg());
             loadGlideImage(editMyProfileImg);
-
         }
         closeMyProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,12 +158,21 @@ public class user_profile_me_edit extends AppCompatActivity {
             public void onClick(View view) {
                 changedName = editMyNameText.getText().toString().trim();
                 Intent profile = new Intent();
-                user_info.setUserName(changedName);
-                user_pref.putUser(user_info);
-                newUserName(user_info.getId(), changedName);
-                newImage(user_info.getId(), image);
-                user_info.setProfileImg(image);
-                user_pref.putUser(user_info);
+                boolean nameChanged = !changedName.equals(user_info.getUserName());
+                boolean imageChanged = (image != null && !image.equals(user_info.getProfileImg()));
+
+                if (nameChanged) {
+                    user_info.setUserName(changedName);
+                    user_pref.putUser(user_info);
+                    newUserName(user_info.getId(), changedName);
+                }
+
+                if (imageChanged) {
+                    user_info.setProfileImg(image);
+                    user_pref.putUser(user_info);
+                    newImage(user_info.getId(), image);
+                }
+
                 Toast.makeText(getApplicationContext(), "프로필이 변경되었습니다.", Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK, profile);
                 finish();

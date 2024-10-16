@@ -14,9 +14,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -38,6 +40,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.widget.NestedScrollView;
 
 import com.example.brokenmirror.R;
@@ -954,12 +957,9 @@ public class join_member extends AppCompatActivity {
             public void onClick(View view) {
                 String current_email_num = emailNum_editText.getText().toString();
                 if (current_email_num.equals(email_num)) {
-                    Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.default_profile);
-                    if (drawable != null) {
-                        // 회원가입 시 기본 프로필 이미지로 설정 
-                        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                        profileImg = converter.BitmapToString(bitmap);
-                    }
+                    // 회원가입 시 기본 프로필 이미지로 설정
+                    Bitmap bitmap = bitmap = getBitmapFromVectorDrawable(join_member.this, R.drawable.default_profile);
+                    profileImg = converter.BitmapToString(bitmap);
                     userJoin(new UserDto(email, inputPW, inputName, inputBirth, inputPhone, profileImg)); // 회원가입
                 } else {
                     showPopupDialog_def();
@@ -976,7 +976,7 @@ public class join_member extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(getApplicationContext(), "회원가입 성공", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(join_member.this, join_member_success.class);
-                    intent.putExtra("email", inputEmail);
+                    intent.putExtra("email", email);
                     intent.putExtra("name", inputNameValue);
                     startActivity(intent);
                     finish();
@@ -994,7 +994,7 @@ public class join_member extends AppCompatActivity {
     public String certifyMail(String id) {
         userApi.certifyMail(id).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(@NonNull Call<String> call,@NonNull Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     email_num = response.body();
                 }
@@ -1103,6 +1103,19 @@ public class join_member extends AppCompatActivity {
             req[0] = false;
         }
         updateJoinButton(req);
+    }
+
+    // VectorDrawable -> Bitmap
+    public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = (DrawableCompat.wrap(drawable)).mutate();
+        }
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 
 }   // join_member.java
